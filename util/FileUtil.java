@@ -23,46 +23,39 @@ public class FileUtil {
     }
 }
 
-Map<String, String> matchingControlFields =Xpaths.RuleSetPage.matchingControl;
-
 // Handle Field Comparison based on type
 Fields.forEach((String key, String value) -> {
 
-    // TEXT type → only text related validations
+    // TEXT TYPE
     if(type.equals("Text")) {
-        if(key.equalsIgnoreCase("Cross match element") ||
-           key.equalsIgnoreCase("Text Equivalent") ||
-           key.equalsIgnoreCase("Ignore case") ||
-           key.equalsIgnoreCase("Ignore character") ||
-           key.equalsIgnoreCase("Tolerate textual difference")) {
-
-            checkPageElementPresent(value, key);
+        if(!(key.equalsIgnoreCase("Cross match element") ||
+             key.equalsIgnoreCase("Text Equivalent") ||
+             key.equalsIgnoreCase("Ignore case") ||
+             key.equalsIgnoreCase("Ignore character") ||
+             key.equalsIgnoreCase("Tolerate textual difference"))) {
+            return; // 🔥 skip invalid ones
         }
     }
 
-    // NUMBER type → numeric validations
+    // NUMBER TYPE
     else if(type.equals("Integer") || type.equals("Decimal")) {
-        if(key.equalsIgnoreCase("Numeric tolerance") ||
-           key.equalsIgnoreCase("Percentage tolerance") ||
-           key.equalsIgnoreCase("Compare absolute value") ||
-           key.equalsIgnoreCase("Cross match element")) {
-
-            checkPageElementPresent(value, key);
+        if(!(key.equalsIgnoreCase("Numeric tolerance") ||
+             key.equalsIgnoreCase("Percentage tolerance") ||
+             key.equalsIgnoreCase("Compare absolute value") ||
+             key.equalsIgnoreCase("Cross match element"))) {
+            return;
         }
     }
 
-    // DATE type → date validations
+    // DATE TYPE
     else if(type.equals("Date") || type.equals("Date/Time")) {
-        if(key.equalsIgnoreCase("Date tolerance") ||
-           key.equalsIgnoreCase("Ignore day portion") ||
-           key.equalsIgnoreCase("Cross match element")) {
-
-            checkPageElementPresent(value, key);
+        if(!(key.equalsIgnoreCase("Date tolerance") ||
+             key.equalsIgnoreCase("Ignore day portion") ||
+             key.equalsIgnoreCase("Cross match element"))) {
+            return;
         }
     }
-});
 
-// Common matching control fields (always present)
-matchingControlFields.forEach((String key, String value) -> {
+    // ✅ Only valid elements reach here
     checkPageElementPresent(value, key);
 });
